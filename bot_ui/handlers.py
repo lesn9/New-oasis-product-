@@ -155,11 +155,41 @@ async def _render_analysis(message, evm, chain: str, address: str) -> None:
                 disable_web_page_preview=True,
             )
     except Exception:
-        log.exception("Failed to send analysis message")
+        log.exception("MarkdownV2 failed — falling back to plain text")
         try:
-            await message.edit_text("⚠️ Formatting error\\. Report generated but could not be displayed\\.")
+            # Strip markdown escapes and markers so the user still sees the data.
+            plain = _strip_markdown(chunks[0])
+            await message.edit_text(
+                plain,
+                parse_mode=None,
+                disable_web_page_preview=True,
+                reply_markup=analyze_actions_keyboard(chain, address),
+            )
+            for chunk in chunks[1:]:
+                await message.reply_text(
+                    _strip_markdown(chunk),
+                    parse_mode=None,
+                    disable_web_page_preview=True,
+                )
         except Exception:
-            pass
+            log.exception("Plain-text fallback also failed")
+            try:
+                await message.edit_text("⚠️ Could not render report. Please try again.")
+            except Exception:
+                pass
+
+
+def _strip_markdown(text: str) -> str:
+    """Best-effort removal of MarkdownV2 syntax for plain-text fallback."""
+    if not text:
+        return ""
+    out = text
+    # Remove escape backslashes
+    out = out.replace("\\", "")
+    # Remove inline markers
+    for ch in ("*", "_", "`", "~"):
+        out = out.replace(ch, "")
+    return out
 
 
 def _chunk(text: str, size: int) -> list:
