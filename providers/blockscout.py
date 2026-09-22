@@ -22,6 +22,7 @@ BLOCKSCOUT_URLS = {
     "linea": "https://linea.blockscout.com",
     "mantle": "https://mantle.blockscout.com",
     "blast": "https://blast.blockscout.com",
+    "robinhood": "https://robinhoodchain.blockscout.com",
 }
 
 
