@@ -10,6 +10,7 @@ from utils.logging import get_logger
 
 log = get_logger(__name__)
 
+
 EVM_CHAINS = {
     "ethereum":   {"id": 1,      "name": "Ethereum",         "native": "ETH",   "explorer": "https://etherscan.io"},
     "base":       {"id": 8453,   "name": "Base",             "native": "ETH",   "explorer": "https://basescan.org"},
