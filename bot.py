@@ -1,5 +1,4 @@
 """Web3 Oasis — Telegram bot entry point."""
-import asyncio
 import sys
 
 from telegram import Update
@@ -16,21 +15,20 @@ from config import get_config, ConfigError
 from providers.alchemy import AlchemyProvider
 from providers.blockscout import BlockscoutProvider
 from providers.dexscreener import DexScreenerProvider
-from telegram.handlers import (
+from bot_ui.handlers import (
     cmd_analyze,
     cmd_help,
     cmd_start,
     on_chain_choice,
     on_refresh,
 )
-from utils.http import close_session
 from utils.logging import get_logger, setup_logging
 
 log = get_logger(__name__)
 
 
 async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
-    log.exception("Unhandled exception", exc_info=context.error)
+    log.error("Unhandled exception", exc_info=context.error)
 
 
 def build_application():
@@ -64,18 +62,7 @@ def main() -> int:
         return 1
 
     log.info("Web3 Oasis starting (polling mode)…")
-
-    async def _shutdown():
-        await close_session()
-
-    try:
-        app.run_polling(allowed_updates=Update.ALL_TYPES)
-    finally:
-        try:
-            asyncio.get_event_loop().run_until_complete(_shutdown())
-        except Exception:
-            pass
-
+    app.run_polling(allowed_updates=Update.ALL_TYPES)
     return 0
 
 
