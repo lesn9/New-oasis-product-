@@ -2,11 +2,12 @@
 from typing import Optional
 
 from providers.base import BaseProvider, TokenMetadata
-from utils.http import get_json, get_session, post_json
+from utils.http import post_json
 from utils.retry import with_retry
 from utils.logging import get_logger
 
 log = get_logger(__name__)
+
 
 ALCHEMY_NETWORKS = {
     "ethereum": "eth-mainnet",
