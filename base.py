@@ -1,36 +1,46 @@
-"""Base adapter interface — one per ecosystem."""
+"""Base provider interface."""
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Optional
 
-from providers.base import TokenMetadata, MarketData
+
+@dataclass
+class TokenMetadata:
+    address: str
+    chain: str
+    name: Optional[str] = None
+    symbol: Optional[str] = None
+    decimals: Optional[int] = None
+    logo: Optional[str] = None
+    total_supply: Optional[str] = None
+    token_type: Optional[str] = None
+    verified: Optional[bool] = None
+    raw: dict = field(default_factory=dict)
 
 
 @dataclass
-class TokenSnapshot:
-    address: str
-    chain: str
-    chain_id: Optional[int] = None
-    ecosystem: str = "evm"
-    metadata: Optional[TokenMetadata] = None
-    market: Optional[MarketData] = None
-    latest_block: Optional[int] = None
-    contract_info: Optional[dict] = None
-    warnings: list = field(default_factory=list)
-    source_notes: list = field(default_factory=list)
+class MarketData:
+    pair_address: Optional[str] = None
+    dex: Optional[str] = None
+    pair_label: Optional[str] = None
+    price_usd: Optional[float] = None
+    price_change_24h: Optional[float] = None
+    liquidity_usd: Optional[float] = None
+    volume_24h_usd: Optional[float] = None
+    market_cap_usd: Optional[float] = None
+    fdv_usd: Optional[float] = None
+    pair_url: Optional[str] = None
+    pairs: list = field(default_factory=list)
+    raw: dict = field(default_factory=dict)
 
 
-class BaseAdapter(ABC):
-    ecosystem: str = "base"
+class ProviderError(Exception):
+    """Raised when a provider cannot return data."""
 
-    @abstractmethod
-    def supported_chains(self) -> list:
-        ...
 
-    @abstractmethod
-    async def find_chains(self, address: str) -> list:
-        ...
+class BaseProvider(ABC):
+    name: str = "base"
 
     @abstractmethod
-    async def snapshot(self, chain: str, address: str) -> TokenSnapshot:
+    async def health(self) -> bool:
         ...
