@@ -1,3 +1,4 @@
+
 """Simple TTL cache with async lock."""
 import asyncio
 from typing import Any, Callable, Hashable, Optional
