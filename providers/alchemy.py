@@ -31,6 +31,7 @@ ALCHEMY_NETWORKS = {
     "sonic": "sonic-mainnet",
     "berachain": "berachain-mainnet",
     "abstract": "abstract-mainnet",
+    "robinhood": "robinhood-mainnet",
 }
 
 
