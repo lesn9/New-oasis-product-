@@ -17,7 +17,7 @@ class AsyncTTLCache:
         async with self._lock:
             self._cache[key] = value
 
-    async def get_or_set(self, key: Hashable, factory: Callable, ttl: Optional[int] = None) -> Any:
+    async def get_or_set(self, key: Hashable, factory: Callable) -> Any:
         cached = await self.get(key)
         if cached is not None:
             return cached
