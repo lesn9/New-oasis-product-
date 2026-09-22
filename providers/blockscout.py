@@ -8,6 +8,7 @@ from utils.logging import get_logger
 
 log = get_logger(__name__)
 
+
 BLOCKSCOUT_URLS = {
     "ethereum": "https://eth.blockscout.com",
     "base": "https://base.blockscout.com",
